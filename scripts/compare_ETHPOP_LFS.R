@@ -46,6 +46,7 @@ lfs_sex_year <-
   group_by(Sex, Year) %>%
   summarise(pop = sum(Weight))
 
+lfs_sex_year$Sex <- paste0(lfs_sex_year$Sex, "_lfs")
 
 #########
 # plots #
@@ -54,6 +55,7 @@ lfs_sex_year <-
 ggplot(in_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
   geom_line() +
   theme_bw() +
+  ylim(0, 400000) +
   geom_line(data = uk_inmigration, aes(x = year, y = inflow, colour = sex)) +
   geom_line(data = lfs_sex_year, aes(x = Year, y = pop, colour = Sex))
 
