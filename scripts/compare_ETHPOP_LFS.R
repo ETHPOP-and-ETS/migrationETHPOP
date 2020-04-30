@@ -47,6 +47,8 @@ lfs_sex_year <-
   summarise(pop = sum(Weight))
 
 lfs_sex_year$Sex <- paste0(lfs_sex_year$Sex, "_lfs")
+in_ethpop_sex_year$sex <- paste0(in_ethpop_sex_year$sex, "_ethpop")
+uk_inmigration$sex <- paste0(uk_inmigration$sex, "_ons")
 
 #########
 # plots #
