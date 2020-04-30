@@ -1,0 +1,21 @@
+---
+title: "clean_migration"
+author: "N Green"
+date: "30/04/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+library(reshape2)
+library(readxl)
+library(migrationETHPOP)
+```
+
+```{r message=FALSE, warning=FALSE}
+clean_migration_by_UKborn()
+```
