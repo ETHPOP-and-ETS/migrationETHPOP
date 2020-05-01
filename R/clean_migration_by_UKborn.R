@@ -1,12 +1,14 @@
 
 #' clean_migration_by_UKborn
 #'
-#' @param dir_path
+#' From ONS migration statistics table
+#'
+#' @param dir_path input data
 #' @param input_file_name
-#' @param rtn
-#' @param save_to_file
-#' @param save_path
-#' @param save_format
+#' @param rtn TRUE/FALSE
+#' @param save_to_file TRUE/FALSE
+#' @param save_path output data
+#' @param save_format csv or RData
 #'
 #' @import readxl, dplyr, reshape2
 #' @return
@@ -19,12 +21,15 @@ clean_migration_by_UKborn <- function(dir_path = here::here("rawdata"),
                                       save_path = here::here("output_data"),
                                       save_format = "csv") {
 
-  inflow <- readxl::read_xls(paste(dir_path, input_file_name, sep = "/"),
-                             sheet = "Table 2.03",
+  sheet_name <- "Table 2.03"
+  data_path <- paste(dir_path, input_file_name, sep = "/")
+
+  inflow <- readxl::read_xls(data_path,
+                             sheet = sheet_name,
                              range = "A17:I40")
 
-  outflow <- readxl::read_xls(paste(dir_path, input_file_name, sep = "/"),
-                              sheet = "Table 2.03",
+  outflow <- readxl::read_xls(data_path,
+                              sheet = sheet_name,
                               range = "A17:I58")
   inflow <-
     inflow %>%
@@ -37,8 +42,8 @@ clean_migration_by_UKborn <- function(dir_path = here::here("rawdata"),
            total = `All countries`) %>%
     mutate(UKborn = as.numeric(UKborn),
            NonUKborn = as.numeric(NonUKborn),
-           total = as.numeric(total)) %>%
-    mutate(pUKborn = UKborn/total,
+           total = as.numeric(total),
+           pUKborn = UKborn/total,
            pNonUKborn = NonUKborn/total)
 
   outflow <-
@@ -52,8 +57,8 @@ clean_migration_by_UKborn <- function(dir_path = here::here("rawdata"),
     filter(total < 0) %>%
     mutate(UKborn = as.numeric(UKborn),
            NonUKborn = as.numeric(NonUKborn),
-           total = as.numeric(total)) %>%
-    mutate(pUKborn = UKborn/total,
+           total = as.numeric(total),
+           pUKborn = UKborn/total,
            pNonUKborn = NonUKborn/total)
 
   if (save_to_file) {
