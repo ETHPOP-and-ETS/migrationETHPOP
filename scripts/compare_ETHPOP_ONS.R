@@ -14,7 +14,7 @@ library(reshape2)
 
 ## ONS
 
-dir_data <- "D:/data/"
+dir_data <- "C:/Users/Nathan/Documents/R/tbinenglanddataclean/output_data/"
 
 uk_inmigration <- readRDS(paste0(dir_data, "uk_inmigration.rds"))
 uk_outmigration <- readRDS(paste0(dir_data, "uk_outmigration.rds"))
@@ -47,14 +47,8 @@ out_ethpop_sex_year <-
 births_ethpop_sex_year <-
   ethpop_births %>%
   select(-X1) %>%
-  melt(id.vars = c("ETH.group", "year"), variable.name = "sex") %>%
-  mutate(sex = if_else(sex == "tot_births",
-                       "person",
-                       ifelse(sex == "mbirths",
-                              "male",
-                              "female"))) %>%
   group_by(sex, year) %>%
-  summarise(pop = sum(value))
+  summarise(pop = sum(births))
 
 
 
@@ -73,18 +67,21 @@ births_ethpop_sex_year <-
 ggplot(in_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
   geom_line() +
   theme_bw() +
-  geom_line(data = uk_inmigration, aes(x = year, y = inflow, colour = sex))
+  geom_line(data = uk_inmigration, aes(x = year, y = inflow, colour = sex)) +
+  ggtitle("in-migration")
 
 # compare outmigration
 
 ggplot(out_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
   geom_line() +
   theme_bw() +
-  geom_line(data = uk_outmigration, aes(x = year, y = outflow, colour = sex))
+  geom_line(data = uk_outmigration, aes(x = year, y = outflow, colour = sex)) +
+  ggtitle("out-migration")
 
 # compare births
 
 ggplot(births_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
   geom_line() +
   theme_bw() +
-  geom_line(data = uk_births, aes(x = year, y = births, colour = sex))
+  geom_line(data = uk_births, aes(x = year, y = births, colour = sex)) +
+  ggtitle("births")
