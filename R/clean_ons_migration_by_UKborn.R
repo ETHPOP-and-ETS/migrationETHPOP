@@ -1,7 +1,7 @@
 
-#' clean_migration_by_UKborn
+#' clean_ons_migration_by_UKborn
 #'
-#' From ONS migration statistics table
+#' From ONS migration statistics Excel table
 #'
 #' @param dir_path input data
 #' @param input_file_name
@@ -14,12 +14,12 @@
 #' @return
 #' @export
 #'
-clean_migration_by_UKborn <- function(dir_path = here::here("rawdata"),
-                                      input_file_name = "2.03ltimcountryofbirth2004to2018.xls",
-                                      rtn = TRUE,
-                                      save_to_file = TRUE,
-                                      save_path = here::here("output_data"),
-                                      save_format = "csv") {
+clean_ons_migration_by_UKborn <- function(dir_path = here::here("rawdata"),
+                                          input_file_name = "2.03ltimcountryofbirth2004to2018.xls",
+                                          rtn = TRUE,
+                                          save_to_file = TRUE,
+                                          save_path = here::here("output_data"),
+                                          save_format = "csv") {
 
   sheet_name <- "Table 2.03"
   data_path <- paste(dir_path, input_file_name, sep = "/")

@@ -1,5 +1,5 @@
 ---
-title: "Clean migration"
+title: "Clean ONS migration"
 author: "N Green"
 date: "30/04/2020"
 output: html_document
@@ -17,5 +17,5 @@ library(migrationETHPOP)
 ```
 
 ```{r message=FALSE, warning=FALSE}
-clean_migration_by_UKborn()
+clean_ons_migration_by_UKborn()
 ```

@@ -1,5 +1,5 @@
 
-# compare ETHPOP projections
+# compare ETHPOP population projections
 # and ONS projections
 # for inmigration and outmigration
 #
@@ -37,20 +37,69 @@ ethpop_births <- read_csv(paste0(dir_ETHPOP, "clean_births.csv"))
 in_ethpop_sex_year <-
   ethpop_inmigrants %>%
   group_by(sex, year) %>%
-  summarise(pop = sum(inmigrants))
+  summarise(pop = sum(inmigrants)) %>%
+  ungroup() %>%
+  mutate(resource = "ethpop")
 
 out_ethpop_sex_year <-
   ethpop_outmigrants %>%
   group_by(sex, year) %>%
-  summarise(pop = sum(outmigrants))
+  summarise(pop = sum(outmigrants)) %>%
+  ungroup() %>%
+  mutate(resource = "ethpop")
 
 births_ethpop_sex_year <-
   ethpop_births %>%
   select(-X1) %>%
   group_by(sex, year) %>%
-  summarise(pop = sum(births))
+  summarise(pop = sum(births)) %>%
+  ungroup() %>%
+  mutate(resource = "ethpop")
 
 
+in_dat <-
+  uk_inmigration %>%
+  mutate(resource = "ons",
+         sex = ifelse(sex == "female",
+                      yes =  "F",
+                      ifelse(sex =="male",
+                             yes = "M",
+                             no = sex))) %>%
+  rename(pop = inflow) %>%
+  bind_rows(in_ethpop_sex_year) %>%
+  filter(sex %in% c("M","F")) %>%
+  mutate(interact = interaction(resource, sex))
+
+out_dat <-
+  uk_outmigration %>%
+  mutate(resource = "ons",
+         sex = ifelse(sex == "female",
+                      yes =  "F",
+                      ifelse(sex =="male",
+                             yes = "M",
+                             no = sex))) %>%
+  rename(pop = outflow) %>%
+  bind_rows(out_ethpop_sex_year) %>%
+  filter(sex %in% c("M","F")) %>%
+  mutate(interact = interaction(resource, sex))
+
+births_dat <-
+  uk_births %>%
+  mutate(resource = "ons",
+         sex = ifelse(sex == "female",
+                      yes =  "F",
+                      ifelse(sex =="male",
+                             yes = "M",
+                             no = sex))) %>%
+  rename(pop = births) %>%
+  bind_rows(births_ethpop_sex_year) %>%
+  filter(sex %in% c("M","F")) %>%
+  mutate(interact = interaction(resource, sex))
+
+
+#########
+# plots #
+#########
 
 # ggplot(in_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
 #   geom_line() +
@@ -58,30 +107,24 @@ births_ethpop_sex_year <-
 #   geom_line(data = out_ethpop_sex_year, aes(x = year, y = pop, colour = sex))
 
 
-#########
-# plots #
-#########
-
+##TODO: don't know whay the shape argument doesn't work...
 # compare inmigration
 
-ggplot(in_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
+ggplot(in_dat, aes(x = year, y = pop, colour = interact, shape = interact, group = interact)) +
   geom_line() +
   theme_bw() +
-  geom_line(data = uk_inmigration, aes(x = year, y = inflow, colour = sex)) +
   ggtitle("in-migration")
 
 # compare outmigration
 
-ggplot(out_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
+ggplot(out_dat, aes(x = year, y = pop, colour = interact, shape = interact, group = interact)) +
   geom_line() +
   theme_bw() +
-  geom_line(data = uk_outmigration, aes(x = year, y = outflow, colour = sex)) +
   ggtitle("out-migration")
 
 # compare births
 
-ggplot(births_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
+ggplot(births_dat, aes(x = year, y = pop, colour = interact, shape = interact, group = interact)) +
   geom_line() +
   theme_bw() +
-  geom_line(data = uk_births, aes(x = year, y = births, colour = sex)) +
   ggtitle("births")
