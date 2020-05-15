@@ -24,8 +24,8 @@ uk_births <- readRDS(paste0(dir_data, "uk_births.rds"))
 
 dir_ETHPOP <- "C:/Users/Nathan/Documents/R/cleanETHPOP/output_data/"
 
-ethpop_inmigrants <- read_csv(paste0(dir_ETHPOP, "clean_inmigrants.csv"))
-ethpop_outmigrants <- read_csv(paste0(dir_ETHPOP, "clean_outmigrants.csv"))
+ethpop_inmigrants <- read_csv(paste0(dir_ETHPOP, "clean_inmigrants_Leeds2.csv"))
+ethpop_outmigrants <- read_csv(paste0(dir_ETHPOP, "clean_outmigrants_Leeds2.csv"))
 ethpop_births <- read_csv(paste0(dir_ETHPOP, "clean_births.csv"))
 
 
@@ -128,3 +128,7 @@ ggplot(births_dat, aes(x = year, y = pop, colour = interact, shape = interact, g
   geom_line() +
   theme_bw() +
   ggtitle("births")
+
+# run this to create html doc for GitHub
+# rmarkdown::render("scripts/compare_ETHPOP_ONS.R", output_dir = here::here("docs"), output_format = "html_document")
+

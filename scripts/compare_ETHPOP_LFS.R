@@ -14,8 +14,8 @@ library(reshape2)
 
 dir_ETHPOP <- "C:/Users/Nathan/Documents/R/cleanETHPOP/output_data/"
 
-ethpop_inmigrants <- read_csv(paste0(dir_ETHPOP, "clean_inmigrants.csv"))
-ethpop_outmigrants <- read_csv(paste0(dir_ETHPOP, "clean_outmigrants.csv"))
+ethpop_inmigrants <- read_csv(paste0(dir_ETHPOP, "clean_inmigrants_Leeds2.csv"))
+ethpop_outmigrants <- read_csv(paste0(dir_ETHPOP, "clean_outmigrants_Leeds2.csv"))
 ethpop_births <- read_csv(paste0(dir_ETHPOP, "clean_births.csv"))
 
 ## LFS
@@ -61,3 +61,6 @@ ggplot(in_ethpop_sex_year, aes(x = year, y = pop, colour = sex)) +
   geom_line(data = uk_inmigration, aes(x = year, y = inflow, colour = sex)) +
   geom_line(data = lfs_sex_year, aes(x = Year, y = pop, colour = Sex))
 
+
+# run this to create html doc for GitHub
+# rmarkdown::render("scripts/compare_ETHPOP_LFS.R", output_dir = here::here("docs"), output_format = "html_document")
